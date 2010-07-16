@@ -87,6 +87,23 @@
             this.exportResultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.GVPReportDataGridView = new System.Windows.Forms.DataGridView();
+            this.GVPPortDataGridView = new System.Windows.Forms.DataGridView();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.InfoMartJobsDataGridView = new System.Windows.Forms.DataGridView();
+            this.InfoMartJobRefreshBtn = new System.Windows.Forms.Button();
+            this.GVPReportRefreshBtn = new System.Windows.Forms.Button();
+            this.GVPActivityRefreshBtn = new System.Windows.Forms.Button();
+            this.SCSLogsProgressBar = new System.Windows.Forms.ProgressBar();
+            this.SNMPProgressBar = new System.Windows.Forms.ProgressBar();
+            this.InfoMartJobProgressBar = new System.Windows.Forms.ProgressBar();
+            this.GVPProgressBar = new System.Windows.Forms.ProgressBar();
+            this.ReportingProgressBar = new System.Windows.Forms.ProgressBar();
+            this.SNMPProgressLabel = new System.Windows.Forms.Label();
+            this.InfoMartJobProgressLabel = new System.Windows.Forms.Label();
+            this.GVPProgressLabel = new System.Windows.Forms.Label();
             this.DashBoardTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -96,8 +113,13 @@
             this.tabPage8.SuspendLayout();
             this.CPUResultContextMenuStrip.SuspendLayout();
             this.SnmpHostContextMenu.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.tabPage5.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GVPReportDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GVPPortDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.InfoMartJobsDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // DashBoardTab
@@ -120,6 +142,14 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.GVPProgressLabel);
+            this.tabPage1.Controls.Add(this.InfoMartJobProgressLabel);
+            this.tabPage1.Controls.Add(this.SNMPProgressLabel);
+            this.tabPage1.Controls.Add(this.ReportingProgressBar);
+            this.tabPage1.Controls.Add(this.GVPProgressBar);
+            this.tabPage1.Controls.Add(this.InfoMartJobProgressBar);
+            this.tabPage1.Controls.Add(this.SNMPProgressBar);
+            this.tabPage1.Controls.Add(this.SCSLogsProgressBar);
             this.tabPage1.Controls.Add(this.ReportingLink);
             this.tabPage1.Controls.Add(this.GVPLink);
             this.tabPage1.Controls.Add(this.InfomartLink);
@@ -132,12 +162,13 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Summary";
             this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
             // 
             // ReportingLink
             // 
             this.ReportingLink.AutoSize = true;
             this.ReportingLink.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ReportingLink.Location = new System.Drawing.Point(56, 203);
+            this.ReportingLink.Location = new System.Drawing.Point(104, 203);
             this.ReportingLink.Name = "ReportingLink";
             this.ReportingLink.Size = new System.Drawing.Size(116, 23);
             this.ReportingLink.TabIndex = 9;
@@ -148,7 +179,7 @@
             // 
             this.GVPLink.AutoSize = true;
             this.GVPLink.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GVPLink.Location = new System.Drawing.Point(56, 162);
+            this.GVPLink.Location = new System.Drawing.Point(104, 162);
             this.GVPLink.Name = "GVPLink";
             this.GVPLink.Size = new System.Drawing.Size(128, 23);
             this.GVPLink.TabIndex = 8;
@@ -159,18 +190,18 @@
             // 
             this.InfomartLink.AutoSize = true;
             this.InfomartLink.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.InfomartLink.Location = new System.Drawing.Point(56, 119);
+            this.InfomartLink.Location = new System.Drawing.Point(104, 119);
             this.InfomartLink.Name = "InfomartLink";
-            this.InfomartLink.Size = new System.Drawing.Size(158, 23);
+            this.InfomartLink.Size = new System.Drawing.Size(156, 23);
             this.InfomartLink.TabIndex = 7;
-            this.InfomartLink.Text = "Infomart jobs";
+            this.InfomartLink.Text = "InfoMart jobs";
             this.InfomartLink.Click += new System.EventHandler(this.InfomartLink_Click);
             // 
             // SNMPLink
             // 
             this.SNMPLink.AutoSize = true;
             this.SNMPLink.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SNMPLink.Location = new System.Drawing.Point(56, 73);
+            this.SNMPLink.Location = new System.Drawing.Point(104, 73);
             this.SNMPLink.Name = "SNMPLink";
             this.SNMPLink.Size = new System.Drawing.Size(146, 23);
             this.SNMPLink.TabIndex = 6;
@@ -181,7 +212,7 @@
             // 
             this.SCSLink.AutoSize = true;
             this.SCSLink.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SCSLink.Location = new System.Drawing.Point(56, 29);
+            this.SCSLink.Location = new System.Drawing.Point(104, 29);
             this.SCSLink.Name = "SCSLink";
             this.SCSLink.Size = new System.Drawing.Size(103, 23);
             this.SCSLink.TabIndex = 5;
@@ -421,6 +452,9 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.InfoMartJobRefreshBtn);
+            this.tabPage4.Controls.Add(this.label3);
+            this.tabPage4.Controls.Add(this.InfoMartJobsDataGridView);
             this.tabPage4.Location = new System.Drawing.Point(4, 25);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
@@ -431,6 +465,12 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.GVPActivityRefreshBtn);
+            this.tabPage5.Controls.Add(this.GVPReportRefreshBtn);
+            this.tabPage5.Controls.Add(this.label2);
+            this.tabPage5.Controls.Add(this.label1);
+            this.tabPage5.Controls.Add(this.GVPPortDataGridView);
+            this.tabPage5.Controls.Add(this.GVPReportDataGridView);
             this.tabPage5.Location = new System.Drawing.Point(4, 25);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
@@ -446,7 +486,7 @@
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage6.Size = new System.Drawing.Size(524, 343);
             this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "Historical Reports";
+            this.tabPage6.Text = "Reporting";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
             // ProcessBtn
@@ -621,6 +661,7 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // imageList1
             // 
@@ -631,6 +672,179 @@
             this.imageList1.Images.SetKeyName(2, "yellow.png");
             this.imageList1.Images.SetKeyName(3, "orange.png");
             this.imageList1.Images.SetKeyName(4, "red.png");
+            // 
+            // GVPReportDataGridView
+            // 
+            this.GVPReportDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.GVPReportDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.GVPReportDataGridView.Location = new System.Drawing.Point(8, 38);
+            this.GVPReportDataGridView.Name = "GVPReportDataGridView";
+            this.GVPReportDataGridView.Size = new System.Drawing.Size(508, 129);
+            this.GVPReportDataGridView.TabIndex = 0;
+            // 
+            // GVPPortDataGridView
+            // 
+            this.GVPPortDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.GVPPortDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.GVPPortDataGridView.Location = new System.Drawing.Point(8, 205);
+            this.GVPPortDataGridView.Name = "GVPPortDataGridView";
+            this.GVPPortDataGridView.Size = new System.Drawing.Size(508, 130);
+            this.GVPPortDataGridView.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(78, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "GVP Reporting";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(9, 184);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(66, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "GVP Activity";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(8, 14);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(71, 13);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "InfoMart Jobs";
+            // 
+            // InfoMartJobsDataGridView
+            // 
+            this.InfoMartJobsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.InfoMartJobsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.InfoMartJobsDataGridView.Location = new System.Drawing.Point(6, 38);
+            this.InfoMartJobsDataGridView.Name = "InfoMartJobsDataGridView";
+            this.InfoMartJobsDataGridView.Size = new System.Drawing.Size(508, 299);
+            this.InfoMartJobsDataGridView.TabIndex = 3;
+            // 
+            // InfoMartJobRefreshBtn
+            // 
+            this.InfoMartJobRefreshBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.InfoMartJobRefreshBtn.Location = new System.Drawing.Point(439, 9);
+            this.InfoMartJobRefreshBtn.Name = "InfoMartJobRefreshBtn";
+            this.InfoMartJobRefreshBtn.Size = new System.Drawing.Size(75, 23);
+            this.InfoMartJobRefreshBtn.TabIndex = 5;
+            this.InfoMartJobRefreshBtn.Text = "Refresh";
+            this.InfoMartJobRefreshBtn.UseVisualStyleBackColor = true;
+            this.InfoMartJobRefreshBtn.Click += new System.EventHandler(this.InfoMartJobRefreshBtn_Click);
+            // 
+            // GVPReportRefreshBtn
+            // 
+            this.GVPReportRefreshBtn.Location = new System.Drawing.Point(441, 9);
+            this.GVPReportRefreshBtn.Name = "GVPReportRefreshBtn";
+            this.GVPReportRefreshBtn.Size = new System.Drawing.Size(75, 23);
+            this.GVPReportRefreshBtn.TabIndex = 6;
+            this.GVPReportRefreshBtn.Text = "Refresh";
+            this.GVPReportRefreshBtn.UseVisualStyleBackColor = true;
+            this.GVPReportRefreshBtn.Click += new System.EventHandler(this.GVPReportRefreshBtn_Click);
+            // 
+            // GVPActivityRefreshBtn
+            // 
+            this.GVPActivityRefreshBtn.Location = new System.Drawing.Point(441, 179);
+            this.GVPActivityRefreshBtn.Name = "GVPActivityRefreshBtn";
+            this.GVPActivityRefreshBtn.Size = new System.Drawing.Size(75, 23);
+            this.GVPActivityRefreshBtn.TabIndex = 7;
+            this.GVPActivityRefreshBtn.Text = "Refresh";
+            this.GVPActivityRefreshBtn.UseVisualStyleBackColor = true;
+            this.GVPActivityRefreshBtn.Click += new System.EventHandler(this.GVPActivityRefreshBtn_Click);
+            // 
+            // SCSLogsProgressBar
+            // 
+            this.SCSLogsProgressBar.ForeColor = System.Drawing.Color.White;
+            this.SCSLogsProgressBar.Location = new System.Drawing.Point(9, 29);
+            this.SCSLogsProgressBar.Name = "SCSLogsProgressBar";
+            this.SCSLogsProgressBar.Size = new System.Drawing.Size(41, 23);
+            this.SCSLogsProgressBar.Step = 1;
+            this.SCSLogsProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.SCSLogsProgressBar.TabIndex = 15;
+            this.SCSLogsProgressBar.Value = 100;
+            // 
+            // SNMPProgressBar
+            // 
+            this.SNMPProgressBar.ForeColor = System.Drawing.Color.White;
+            this.SNMPProgressBar.Location = new System.Drawing.Point(9, 73);
+            this.SNMPProgressBar.Name = "SNMPProgressBar";
+            this.SNMPProgressBar.Size = new System.Drawing.Size(41, 23);
+            this.SNMPProgressBar.Step = 1;
+            this.SNMPProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.SNMPProgressBar.TabIndex = 16;
+            this.SNMPProgressBar.Value = 100;
+            // 
+            // InfoMartJobProgressBar
+            // 
+            this.InfoMartJobProgressBar.ForeColor = System.Drawing.Color.White;
+            this.InfoMartJobProgressBar.Location = new System.Drawing.Point(9, 119);
+            this.InfoMartJobProgressBar.Maximum = 4;
+            this.InfoMartJobProgressBar.Name = "InfoMartJobProgressBar";
+            this.InfoMartJobProgressBar.Size = new System.Drawing.Size(41, 23);
+            this.InfoMartJobProgressBar.Step = 1;
+            this.InfoMartJobProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.InfoMartJobProgressBar.TabIndex = 17;
+            this.InfoMartJobProgressBar.Value = 4;
+            // 
+            // GVPProgressBar
+            // 
+            this.GVPProgressBar.ForeColor = System.Drawing.Color.White;
+            this.GVPProgressBar.Location = new System.Drawing.Point(9, 162);
+            this.GVPProgressBar.Maximum = 4;
+            this.GVPProgressBar.Name = "GVPProgressBar";
+            this.GVPProgressBar.Size = new System.Drawing.Size(41, 23);
+            this.GVPProgressBar.Step = 1;
+            this.GVPProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.GVPProgressBar.TabIndex = 18;
+            this.GVPProgressBar.Value = 4;
+            // 
+            // ReportingProgressBar
+            // 
+            this.ReportingProgressBar.ForeColor = System.Drawing.Color.White;
+            this.ReportingProgressBar.Location = new System.Drawing.Point(9, 203);
+            this.ReportingProgressBar.Name = "ReportingProgressBar";
+            this.ReportingProgressBar.Size = new System.Drawing.Size(41, 23);
+            this.ReportingProgressBar.Step = 1;
+            this.ReportingProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.ReportingProgressBar.TabIndex = 19;
+            this.ReportingProgressBar.Value = 100;
+            // 
+            // SNMPProgressLabel
+            // 
+            this.SNMPProgressLabel.AutoSize = true;
+            this.SNMPProgressLabel.Location = new System.Drawing.Point(56, 81);
+            this.SNMPProgressLabel.Name = "SNMPProgressLabel";
+            this.SNMPProgressLabel.Size = new System.Drawing.Size(24, 13);
+            this.SNMPProgressLabel.TabIndex = 20;
+            this.SNMPProgressLabel.Text = "0/0";
+            // 
+            // InfoMartJobProgressLabel
+            // 
+            this.InfoMartJobProgressLabel.AutoSize = true;
+            this.InfoMartJobProgressLabel.Location = new System.Drawing.Point(56, 127);
+            this.InfoMartJobProgressLabel.Name = "InfoMartJobProgressLabel";
+            this.InfoMartJobProgressLabel.Size = new System.Drawing.Size(24, 13);
+            this.InfoMartJobProgressLabel.TabIndex = 21;
+            this.InfoMartJobProgressLabel.Text = "0/0";
+            // 
+            // GVPProgressLabel
+            // 
+            this.GVPProgressLabel.AutoSize = true;
+            this.GVPProgressLabel.Location = new System.Drawing.Point(56, 170);
+            this.GVPProgressLabel.Name = "GVPProgressLabel";
+            this.GVPProgressLabel.Size = new System.Drawing.Size(24, 13);
+            this.GVPProgressLabel.TabIndex = 22;
+            this.GVPProgressLabel.Text = "0/0";
             // 
             // Dashboard
             // 
@@ -655,10 +869,17 @@
             this.tabPage8.ResumeLayout(false);
             this.CPUResultContextMenuStrip.ResumeLayout(false);
             this.SnmpHostContextMenu.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GVPReportDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GVPPortDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.InfoMartJobsDataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -723,6 +944,23 @@
         private System.Windows.Forms.Label InfomartLink;
         private System.Windows.Forms.Label SNMPLink;
         private System.Windows.Forms.Label SCSLink;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DataGridView GVPPortDataGridView;
+        private System.Windows.Forms.DataGridView GVPReportDataGridView;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DataGridView InfoMartJobsDataGridView;
+        private System.Windows.Forms.Button InfoMartJobRefreshBtn;
+        private System.Windows.Forms.Button GVPActivityRefreshBtn;
+        private System.Windows.Forms.Button GVPReportRefreshBtn;
+        private System.Windows.Forms.ProgressBar ReportingProgressBar;
+        private System.Windows.Forms.ProgressBar GVPProgressBar;
+        private System.Windows.Forms.ProgressBar InfoMartJobProgressBar;
+        private System.Windows.Forms.ProgressBar SNMPProgressBar;
+        private System.Windows.Forms.ProgressBar SCSLogsProgressBar;
+        private System.Windows.Forms.Label SNMPProgressLabel;
+        private System.Windows.Forms.Label InfoMartJobProgressLabel;
+        private System.Windows.Forms.Label GVPProgressLabel;
     }
 }
 

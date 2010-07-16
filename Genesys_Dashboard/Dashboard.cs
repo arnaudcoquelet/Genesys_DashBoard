@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
+using Oracle.DataAccess.Client;
+
 namespace Genesys_DashBoard
 {
     public partial class Dashboard : Form
@@ -16,7 +18,12 @@ namespace Genesys_DashBoard
         private ListViewColumnSorter SnmpHDDResultlvwColumnSorter;
         private ListViewColumnSorter SnmpCPUResultlvwColumnSorter;
 
+        //InfoMart Tab
+        private InfoMart.InfoMartConfig InfoMartJobConfig;
 
+        //GVP Tab
+        private GVP.GVPReportConfig GVPReportingConfig;
+        private GVP.GVPPortConfig GVPPortConfig;
 
         public Dashboard()
         {
@@ -24,18 +31,17 @@ namespace Genesys_DashBoard
 
 
             //Load SCS config
-            loadSNMPConfig();
+
 
             //Load SNMP config
+            loadSNMPConfig();
 
+            //Load InfoMart config
+            loadInfoMartConfig();
 
+            //Load GVP config
+            loadGVPConfig();
 
-
-            SCSLink.ForeColor = Color.Red;
-            SNMPLink.ForeColor = Color.Orange;
-            InfomartLink.ForeColor = Color.Yellow;
-            GVPLink.ForeColor = Color.Green;
-            ReportingLink.ForeColor = Color.Blue;
         }
 
         #region  Summary LINKS
@@ -66,6 +72,33 @@ namespace Genesys_DashBoard
         }
 
         #endregion
+
+
+        private void ProcessBtn_Click(object sender, EventArgs e)
+        {
+            //SCS Logs
+
+            //SNMP
+            SnmpPollAllHost();
+            //SnmpHDDResultsToFile();
+            //SnmpCPUResultsToFile();
+
+            //InfoMart logs
+            InfoMartGetAllDayJobs();
+
+            //GVP
+            GVPReportingGetAllDayCalls();
+
+            //Historical Reports
+
+        }
+
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new AboutBox().Show();
+        }
+
 
 
         #region  SNMP
@@ -112,6 +145,11 @@ namespace Genesys_DashBoard
             {
                 loadSnmpConfigFile();
             }
+
+            //Refresh
+            SnmpHostListView.Refresh();
+            SnmpHDDResultListView.Refresh();
+            SnmpCPUResultListView.Refresh();
         }
 
         private void loadSnmpConfigFile()
@@ -302,17 +340,24 @@ namespace Genesys_DashBoard
             string cpuLoad = e.Item.SubItems[3].Text;
             cpuLoad = cpuLoad.Substring(0, cpuLoad.Length - 1);
             double vcpuLoad = Convert.ToDouble(cpuLoad);
-            if (vcpuLoad > 70)
-            {
-                colorItem = System.Drawing.Color.Yellow;
-            }
-            if (vcpuLoad > 80)
-            {
-                colorItem = System.Drawing.Color.Orange;
-            }
+
             if (vcpuLoad > 90)
             {
                 colorItem = System.Drawing.Color.Red;
+            }
+            else
+            {
+                if (vcpuLoad > 80)
+                {
+                    colorItem = System.Drawing.Color.Orange;
+                }
+                else
+                {
+                    if (vcpuLoad > 70)
+                    {
+                        colorItem = System.Drawing.Color.Yellow;
+                    }
+                }
             }
 
             e.Item.BackColor = colorItem;
@@ -326,14 +371,10 @@ namespace Genesys_DashBoard
 
         #endregion
 
-        private void ProcessBtn_Click(object sender, EventArgs e)
+        private void SnmpCleanAllPoll()
         {
-
-            //SNMP
-            SnmpPollAllHost();
-            SnmpHDDResultsToFile();
-            SnmpCPUResultsToFile();
-
+            SnmpHDDResultListView.Clear();
+            SnmpCPUResultListView.Clear();
         }
 
         private void SnmpCPUResultsToFile()
@@ -376,15 +417,19 @@ namespace Genesys_DashBoard
                 this.FailedLabel.Visible = true;
                 this.ProgressFailedLabel.Visible = true;
 
-                this.ProgressBar.Minimum = 0;
-                this.ProgressBar.Maximum = SnmpHostListView.Items.Count;
-                this.ProgressBar.Step = 1;
-                this.ProgressStatusLabel.Text = String.Format("0/{0}", SnmpHostListView.Items.Count);
-                this.Refresh();
-                //this.statusStrip1.Refresh();
+                this.SNMPProgressBar.Minimum = 0;
+                this.SNMPProgressBar.Maximum = SnmpHostListView.Items.Count;
+                this.SNMPProgressBar.Value = 0;
+                this.SNMPProgressBar.Step = 1;
+                this.SNMPProgressBar.ForeColor = Color.Blue;
+                this.SNMPProgressBar.Refresh();
+
+                this.SNMPProgressLabel.Text = String.Format("0/{0}", SNMPProgressBar.Maximum);
+                this.SNMPProgressLabel.Refresh();
 
                 int i = 1;
                 int failed = 0;
+
                 foreach (ListViewItem lsti in SnmpHostListView.Items)
                 {
                     SnmpPoller snmp = new SnmpPoller(SnmpHDDResultListView, SnmpCPUResultListView, lsti.SubItems[0].Text, Convert.ToInt16(lsti.SubItems[1].Text), lsti.SubItems[2].Text, Convert.ToInt16(lsti.SubItems[3].Text), lsti.SubItems[4].Text, lsti.SubItems[5].Text);
@@ -394,18 +439,241 @@ namespace Genesys_DashBoard
                     if (snmp.SnmpError != "")
                     {
                         failed++;
-                        this.ProgressFailedLabel.Text = String.Format("{0}/{1}", failed, SnmpHostListView.Items.Count);
+                        this.ProgressFailedLabel.Text = String.Format("{0}/{1}", failed, SNMPProgressBar.Maximum);
                     }
 
-                    this.ProgressBar.PerformStep();
-                    this.ProgressStatusLabel.Text = String.Format("{0}/{1}", i, SnmpHostListView.Items.Count);
-                    this.Refresh();
-                    //this.statusStrip1.Refresh();
+                    this.SNMPProgressBar.PerformStep();
+                    this.SNMPProgressBar.Refresh();
+
+                    this.SNMPProgressLabel.Text = String.Format("{0}/{1}", i, SNMPProgressBar.Maximum);
+                    this.SNMPProgressLabel.Refresh();
                     i++;
                 }
             }
+
+            //Refresh
+            SnmpHostListView.Refresh();
+            SnmpHDDResultListView.Refresh();
+            SnmpCPUResultListView.Refresh();
         }
 
         #endregion
+
+
+        #region InfoMart
+        private void InfoMartJobRefreshBtn_Click(object sender, EventArgs e)
+        {
+            InfoMartGetAllDayJobs();
+        }
+
+        private void InfoMartGetAllDayJobs()
+        {
+            if (InfoMartJobConfig != null)
+            {
+                OracleConnection InfoMartDBCon = new OracleConnection();
+                //using connection string attributes to connect to Oracle Database
+                InfoMartDBCon.ConnectionString = String.Format("User Id={0};Password={1};Data Source=//{2}:{3}/{4}", InfoMartJobConfig.username, InfoMartJobConfig.password, InfoMartJobConfig.hostname, InfoMartJobConfig.port, InfoMartJobConfig.service);
+
+                this.InfoMartJobProgressBar.Value = 0;
+                this.InfoMartJobProgressBar.Step = 1;
+                this.InfoMartJobProgressBar.ForeColor = Color.Blue;
+                this.InfoMartJobProgressLabel.Text = "0/4";
+                this.InfoMartJobProgressBar.Refresh();
+                this.InfoMartJobProgressLabel.Refresh();
+
+                try
+                {
+                    InfoMartDBCon.Open();
+                    this.InfoMartJobProgressBar.PerformStep();
+                    this.InfoMartJobProgressLabel.Text = "1/4";
+                    this.InfoMartJobProgressBar.Refresh();
+                    this.InfoMartJobProgressLabel.Refresh();
+
+                    OracleDataAdapter InfoMartJobAdpater = new OracleDataAdapter(string.Format("SELECT job_name as \"Job\", START_TIME as \"Start\", End_Time as \"End\", Status as \"Status\", to_char(to_date(Duration,'SSSSS'),'HH24:MI:SS') as \"Duration\", DBCOnnection as \"DB\" FROM {0} WHERE START_TIME > (sysdate -1) ORDER BY Start_Time desc", InfoMartJobConfig.table), InfoMartDBCon);
+                    DataTable InfoMartJobDataTable = new DataTable("InfoMartJob");
+                    InfoMartJobAdpater.Fill(InfoMartJobDataTable);
+                    this.InfoMartJobProgressBar.PerformStep();
+                    this.InfoMartJobProgressLabel.Text = "2/4";
+                    this.InfoMartJobProgressBar.Refresh();
+                    this.InfoMartJobProgressLabel.Refresh();
+
+                    InfoMartJobsDataGridView.DataSource = InfoMartJobDataTable;
+                    this.InfoMartJobProgressBar.PerformStep();
+                    this.InfoMartJobProgressLabel.Text = "3/4";
+                    this.InfoMartJobProgressBar.Refresh();
+                    this.InfoMartJobProgressLabel.Refresh();
+
+                    InfoMartDBCon.Close();
+                    InfoMartDBCon.Dispose();
+                    this.InfoMartJobProgressBar.PerformStep();
+                    this.InfoMartJobProgressLabel.Text = "4/4";
+                    this.InfoMartJobProgressBar.Refresh();
+                    this.InfoMartJobProgressLabel.Refresh();
+                }
+                catch (Exception ex) { }
+            }
+        }
+
+
+
+        #region InfoMart Config
+        private void loadInfoMartConfig()
+        {
+            InfoMartJobConfig = new InfoMart.InfoMartConfig();
+
+            loadInfoMartConfigFile();
+        }
+
+        private void loadInfoMartConfigFile()
+        {
+            IniFile ini = new IniFile("InfoMart Config.ini");
+            if (ini.Exists())
+            {
+                ini.Load();
+            }
+
+            if (InfoMartJobConfig != null)
+            {
+                InfoMartJobConfig.hostname = ini["InfoMart DB"]["HostName"];
+                InfoMartJobConfig.port = ini["InfoMart DB"]["Port"];
+                InfoMartJobConfig.service = ini["InfoMart DB"]["Service"];
+                InfoMartJobConfig.table = ini["InfoMart DB"]["Table"];
+                InfoMartJobConfig.username = ini["InfoMart DB"]["Username"];
+                InfoMartJobConfig.password = ini["InfoMart DB"]["Password"];
+            }
+        }
+
+        private void saveInfoMartConfigFile()
+        {
+            IniFile ini = new IniFile("InfoMart Config.ini");
+
+            if (InfoMartJobConfig != null)
+            {
+                IniSection section = new IniSection();
+                section.Add("HostName", InfoMartJobConfig.hostname);
+                section.Add("Port", InfoMartJobConfig.port );
+                section.Add("Service", InfoMartJobConfig.service );
+                section.Add("Table", InfoMartJobConfig.table );
+                section.Add("Username", InfoMartJobConfig.username );
+                section.Add("Password", InfoMartJobConfig.password );
+                ini.Add("InfoMart DB", section);
+            }
+            ini.Save();
+        }
+        #endregion
+
+
+
+        #endregion
+
+
+        #region GVP
+        private void GVPReportRefreshBtn_Click(object sender, EventArgs e)
+        {
+            GVPReportingGetAllDayCalls();
+        }
+
+        private void GVPActivityRefreshBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void GVPReportingGetAllDayCalls()
+        {
+            if (GVPReportingConfig != null)
+            {
+                OracleConnection GVPReportDBCon = new OracleConnection();
+                //using connection string attributes to connect to Oracle Database
+                GVPReportDBCon.ConnectionString = String.Format("User Id={0};Password={1};Data Source=//{2}:{3}/{4}", GVPReportingConfig.username, GVPReportingConfig.password, GVPReportingConfig.hostname, GVPReportingConfig.port, GVPReportingConfig.service);
+
+                this.GVPProgressBar.Value = 0;
+                this.GVPProgressBar.Step = 1;
+                this.GVPProgressBar.ForeColor = Color.Blue;
+                this.GVPProgressLabel.Text = "0/4";
+                this.GVPProgressBar.Refresh();
+                this.GVPProgressLabel.Refresh();
+
+                try
+                {
+                    GVPReportDBCon.Open();
+                    this.GVPProgressBar.PerformStep();
+                    this.GVPProgressLabel.Text = "1/4";
+                    this.GVPProgressBar.Refresh();
+                    this.GVPProgressLabel.Refresh();
+
+                    OracleDataAdapter GVPReportAdpater = new OracleDataAdapter(string.Format("SELECT * FROM (SELECT CONN_ID as \"ConnID\", OCCURRENCE_TIME as \"Start\", CONTEXT as \"Context\", RESULT as \"Status\", Duration as \"Duration\" from {0} WHERE OCCURRENCE_TIME > (sysdate -1) ORDER BY CONN_ID DESC) WHERE rownum<100", GVPReportingConfig.table), GVPReportDBCon);
+                    DataTable GVPReportDataTable = new DataTable("GVPReport");
+                    GVPReportAdpater.Fill(GVPReportDataTable);
+                    this.GVPProgressBar.PerformStep();
+                    this.GVPProgressLabel.Text = "2/4";
+                    this.GVPProgressBar.Refresh();
+                    this.GVPProgressLabel.Refresh();
+
+                    GVPReportDataGridView.DataSource = GVPReportDataTable;
+                    this.GVPProgressBar.PerformStep();
+                    this.GVPProgressLabel.Text = "3/4";
+                    this.GVPProgressBar.Refresh();
+                    this.GVPProgressLabel.Refresh();
+
+                    GVPReportDBCon.Close();
+                    GVPReportDBCon.Dispose();
+                    this.GVPProgressBar.PerformStep();
+                    this.GVPProgressLabel.Text = "4/4";
+                    this.GVPProgressBar.Refresh();
+                    this.GVPProgressLabel.Refresh();
+                }
+                catch (Exception ex) { }
+            }
+        }
+
+        #region GVP Report Config
+        private void loadGVPConfig()
+        {
+            GVPReportingConfig = new GVP.GVPReportConfig();
+            GVPPortConfig = new GVP.GVPPortConfig();
+
+            loadGVPConfigFile();
+        }
+
+        private void loadGVPConfigFile()
+        {
+            IniFile ini = new IniFile("GVP Config.ini");
+            if (ini.Exists())
+            {
+                ini.Load();
+            }
+
+            if (GVPReportingConfig != null)
+            {
+                GVPReportingConfig.hostname = ini["GVP Report DB"]["HostName"];
+                GVPReportingConfig.port = ini["GVP Report DB"]["Port"];
+                GVPReportingConfig.service = ini["GVP Report DB"]["Service"];
+                GVPReportingConfig.table = ini["GVP Report DB"]["Table"];
+                GVPReportingConfig.username = ini["GVP Report DB"]["Username"];
+                GVPReportingConfig.password = ini["GVP Report DB"]["Password"];
+            }
+
+
+        }
+
+        private void saveGVPConfigFile()
+        {
+            IniFile ini = new IniFile("GVP Config.ini");
+
+            ini.Save();
+        }
+        #endregion
+
+
+
+
+        #endregion
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
 }

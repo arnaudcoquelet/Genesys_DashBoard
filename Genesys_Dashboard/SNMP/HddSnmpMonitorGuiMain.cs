@@ -62,6 +62,11 @@ namespace Genesys_DashBoard
             }
         }
 
+        private void initSnmpTab()
+        { 
+        
+        }
+
         private void loadConfigFile()
         {
             string currentPath = Directory.GetCurrentDirectory();
